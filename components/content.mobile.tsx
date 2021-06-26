@@ -9,21 +9,24 @@ function MobileContent({ refQuestion, language, selectedQuestion, content, handl
             <span>{language && language.toUpperCase()}</span>
             <div className="flex centerX centerY" data-color={language}>
                 <ul ref={refQuestion}>
-                    {Object.keys(content.options).map(option => (
-                        <li key={`key-${selectedQuestion}-${option}`}>
-                            <input
-                                id={`radio-${selectedQuestion}-${option}`}
-                                type="radio"
-                                name="answer"
-                                value={option}
-                                onClick={handleAnswer}
-                                defaultChecked={content.answer === option ? true : false}
-                            />
-                            <label htmlFor={`radio-${selectedQuestion}-${option}`} data-color={language}>
-                                {content.options[option]}
-                            </label>
-                        </li>
-                    ))}
+                    {Object.keys(content.options).map(option => {
+                        if (option !== "id") {
+                            return (<li key={`key-${selectedQuestion}-${option}`}>
+                                <input
+                                    id={`radio-${selectedQuestion}-${option}`}
+                                    type="radio"
+                                    name="answer"
+                                    value={option}
+                                    onClick={handleAnswer}
+                                    defaultChecked={content.answer === option ? true : false}
+                                />
+                                <label htmlFor={`radio-${selectedQuestion}-${option}`} data-color={language}>
+                                    {content.options[option]}
+                                </label>
+                            </li>)
+                        }
+                    }
+                    )}
                 </ul>
             </div>
         </section>
