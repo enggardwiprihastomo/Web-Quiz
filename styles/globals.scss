@@ -1,0 +1,935 @@
+@import "./variables";
+@import "./screen";
+
+[data-color="node.js"]{
+  background: linear-gradient(to right, $nodejs, #009000);
+}
+
+[data-color="react"]{
+  background: linear-gradient(to right, $react, #1529ff);
+}
+
+[data-color="html"]{
+  background: linear-gradient(to right, $html, #bf000d);
+}
+
+[data-color="css"]{
+  background: linear-gradient(to right, $css, #130086);
+}
+
+%responsiveBgColor{
+  [data-color="node.js"]{
+    background: $nodejs;
+  }
+
+  [data-color="html"]{
+    background: $html;
+  }
+
+  [data-color="css"]{
+    background: $css;
+  }
+
+  [data-color="react"]{
+    background: $react;
+  }
+}
+
+%button-style{
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+%radioQuestion{
+  input[type="radio"]{
+    position: absolute;
+    opacity: 0;
+    
+    + label {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      min-width: 30rem;
+      max-width: 20rem;
+      height: 4rem;
+      user-select: none;
+      background: rgba($white, .4);
+      transition: all .25s ease;
+
+      &:active {
+        transform: scale(.95);
+      }
+      
+      &::before{
+        content: "";
+        top: 0;
+        left: 0;
+        position: absolute;
+        height: 100%;
+        width: 0;
+        z-index: -1;
+        background: $white;
+        transition: width .25s ease;
+      }
+    }
+    
+    &:checked{
+      + [data-color="css"]{
+        color: $css;
+      }
+
+      + [data-color="html"]{
+        color: $html;
+      }
+
+      + [data-color="react"]{
+        color: $react;
+      }
+
+      + [data-color="node.js"]{
+        color: $nodejs;
+      }
+
+      + label{
+        font-weight: bold;
+        background: none;
+        transform: scale(1);
+      
+
+        &::before{
+        width: 100%;
+        }
+      }
+    }
+  }
+}
+
+@mixin radio($color) {
+  opacity: 0;
+  + label {
+    left: -2rem;
+    position: relative;
+    cursor: pointer;
+    font-weight: bold;
+    color: $gray;
+    
+    &::before{
+      content: "";
+      top: 0;
+      position: absolute;
+      height: 4rem;
+      width: 4rem;
+      // border-radius: 2rem 0 0 2rem;
+      background: $shadow;
+    }
+    
+    &::after{
+      position: absolute;
+      content: attr(data-label);
+      top: 1.2rem;
+      left: 1.5rem;
+    }
+  }
+
+  &:checked{
+     + label{
+      &::before{
+        background: $color;
+      }
+
+      &::after{
+        color: 
+        $white;
+      }
+    }
+    
+    ~ input[type="text"]{
+      color: $white;
+      background: rgba($color, .6);
+    }
+  }
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Ubuntu;
+  font-size: .625rem;
+}
+
+* {
+  box-sizing: border-box;
+  font-size: 1.4rem;
+  color: $gray;
+}
+
+h1{
+  font-size: 2.4rem;
+  font-weight: bold;
+}
+
+h2{
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+  margin-top: 2rem;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.grid{
+  display: grid;
+}
+
+.flex{
+  display: flex;
+  flex: 1;
+}
+
+.menu-active{
+  background: rgba($white, .5);
+  border-radius: 2rem;
+  font-weight: bold;
+}
+
+.column{
+  flex-direction: column;
+}
+
+.centerY{
+  justify-content: center;
+}
+
+.centerX{
+  align-items: center;
+}
+
+.endY{
+  justify-content: flex-end;
+}
+
+.endX{
+  align-items: flex-end;
+}
+
+
+.header{
+  flex: 1;
+  position: relative;
+  margin: 1rem;
+  padding: 1rem;
+  padding-left: 2rem;
+  border-radius: 1rem;
+  overflow: hidden;
+
+  @include mobile(){
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  *{
+    color: $white;
+    z-index: 1;
+  }
+  
+  &-menu{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    @include mobile(){
+      grid-template-columns: repeat(2, 1fr);
+      align-items: center;
+    }
+    
+    li{
+      height: 3rem;
+      user-select: none;
+      padding: .5rem 2rem;
+      cursor: pointer;
+      margin: 0 .5rem;
+      font-size: 1.2rem;
+      transition: transform .25s ease;
+      
+      @include mobile(){
+        border-radius: 0;
+      }
+    }
+  }
+
+  height: 12rem;
+  transition: background-color .25s ease;
+
+  img{
+    height: 24rem;
+    width: auto;
+    position: absolute;
+    opacity: .4;
+    left: -2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 0;
+  }
+}
+
+.question{
+  grid-template-areas: 
+    "question question options"
+    "button button button";
+
+    @include mobile(){
+      grid-template-areas: 
+        "question"
+        "options"
+        "button";
+    }
+
+  padding: 2rem;
+
+  &-description{
+    grid-area: question;
+    margin-right: 2rem;
+
+    p{
+      font-weight: bold;
+    }
+
+    textarea{
+      flex: 1;
+      outline: none;
+      border: none;
+      width: 100%;
+      resize: none;
+    }
+  }
+
+  &-options{
+    grid-area: options;
+
+    ul{
+      flex: 1;
+    }
+
+    li{
+      flex: 1;
+      margin: .5rem 0;
+      height: 4rem;
+    }
+  
+    input[type="text"]{
+      height: 4rem;
+      // border-radius: 0 2rem 2rem 0;
+      flex: 1;
+      margin-left: 2rem;
+      border: none;
+      background: rgba($shadow, .6);
+      padding: 1rem;
+      outline: none;
+    }
+  
+    [data-color="node.js"]{
+      @include radio($nodejs)
+    }
+
+    [data-color="html"]{
+      @include radio($html)
+    }
+
+    [data-color="css"]{
+      @include radio($css)
+    }
+
+    [data-color="react"]{
+      @include radio($react)
+    }
+  }
+
+  &-action{
+    grid-area: button;
+    margin: 2rem 0;
+    
+    button{
+      @extend %button-style;
+      color: $white;
+      padding: 1rem 2rem;
+      font-size: bold;
+      border-radius: 1rem;
+
+      @include mobile(){
+        flex: 1;
+      }
+    }
+
+    [data-color="node.js"]{
+      background: linear-gradient(to right, $nodejs, #009000);
+    }
+    
+    [data-color="react"]{
+      background: linear-gradient(to right, $react, #1529ff);
+    }
+    
+    [data-color="html"]{
+      background: linear-gradient(to right, $html, #bf000d);
+    }
+    
+    [data-color="css"]{
+      background: linear-gradient(to right, $css, #130086);
+    }
+  }
+
+  &-empty{
+    flex: 1;
+    padding: 2rem;
+    min-height: 30rem;
+
+    p{
+      color: $gray;
+      margin: 0;
+    }
+
+    img{
+      width: 40rem;
+      height: auto;
+
+      @include mobile(){
+        width: 20rem;
+      }
+    }
+  }
+
+  &-list{
+
+    > p{
+      font-weight: bold;
+      padding: 1rem 0;
+      margin: 0 2rem;
+      border-bottom: .1rem solid $shadow;
+    }
+
+    ul{
+      margin: 2rem;
+    }
+
+    li + li{
+      margin-top: 1rem;
+    }
+
+    li{
+      border-radius: 1rem;
+      box-shadow: 0 0 .5rem .1rem $shadow;
+      padding: .5rem 1rem;
+    }
+
+    p{
+      flex: 1;
+    }
+
+    button{
+      @extend %button-style;
+      background: none;
+      margin: 0 1rem;
+    }
+  }
+}
+
+.content{
+  min-height: 100vh;
+
+  &-header{
+    padding: 1rem 0;
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+  }
+
+  &-title{
+    display: inline-flex;
+    align-items: center;
+    border-top: .1rem solid $shadow;
+    padding: 1rem 2rem;
+
+    @include mobile(){
+      display: none;
+    }
+
+    p {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 0;
+    }
+
+    img{
+      height: 3rem;
+      width: 3rem;
+      margin-right: 1rem;
+    }
+  }
+
+  a{
+    @extend %button-style;
+    background: $white;
+    height: 2rem;
+    width: 2rem;
+    margin: 1rem;
+
+    > * {
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+  
+  .btn-back{
+    @include mobile(){
+      display: none;
+    }
+
+    &-mobile{
+      position: absolute;
+      display: none;
+      @include mobile(){
+        display: flex;
+      }
+    }
+  }
+
+  &-info{
+    display: flex;
+    position: relative;
+    width: 100%;
+    padding: 1rem 2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    @include mobile(){
+      display: none;
+    }
+
+    &-mobile{
+      display: none;
+      @include mobile(){
+        display: block;
+        flex: 1;
+        text-align: center;
+        p{
+          display: inline-block;
+          margin: 0;
+          font-weight: bold;
+          font-size: 1.8rem;
+          color: $gray;
+        }
+        
+        p + p{
+          font-weight: normal;
+          font-size: 1.4rem;
+          color: rgba($gray, .6);
+        }
+      }
+    }
+    
+    > span{
+      display: flex;
+      flex-shrink: 0;
+      flex-grow: 0;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      height: 4rem;
+      width: 10rem;
+      z-index: 1;
+      transition: color .25s ease;
+      user-select: none;
+      cursor: pointer;
+      border-radius: 1rem;
+      border: .1rem solid $shadow;
+    }
+
+    > span + span {
+      margin-left: 1rem;
+    }
+
+    .question-active {
+      border: none;
+      color: $white;
+      font-weight: bold;
+    }  
+
+  }
+
+  &-progress-mobile{
+    display: none;
+
+    @include mobile(){
+      display: block;
+      width: 100%;
+      padding: 2rem;
+    }
+  }
+
+  &-bar{
+    position: absolute;
+    height: 4rem;
+    width: 10rem;
+    transition: left .25s ease;
+    left: 2rem;
+    border-radius: 1rem;
+    z-index: 0;
+
+    &-wrapper{
+      display: none;
+
+      @include mobile(){
+        display: block;
+        position: relative;
+        overflow: hidden;
+        height: 1rem;
+        flex: 1;
+        border-radius: .5rem;
+        background: $shadow;
+      }
+    }
+
+    &-progress{
+      display: none;
+      width: 0;
+      height: 1rem;
+      transition: width .25s ease;
+
+      @include mobile(){
+        display: block;
+        position: absolute;
+        left: 0;
+      }
+    }
+  }
+
+  
+  &-quiz{
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    
+    @include mobile{
+      display: none;
+    }
+    
+    &-mobile{
+      position: relative;
+      display: none;
+      background: $white;
+      overflow: hidden;
+      
+      @extend %radioQuestion;
+      
+      @include mobile(){
+        display: inline-flex;
+
+        * {
+          color: $white;
+        }
+
+        img{
+          position: absolute;
+          z-index: 1;
+          bottom: 0;
+          left: 0;
+          height: 30rem;
+          width: auto;
+          opacity: .2;
+        }
+
+        p{
+          color: rgba($gray, .5);
+          margin: 0;
+          padding: 0 2rem;
+          font-size: 1.2rem;
+        }
+        
+        p + p {
+          padding-top: .5rem;
+          color: $gray;
+          font-size: 2rem;
+        }
+        
+        span{
+          color: rgba($gray, .6);
+          font-size: 1rem;
+          font-weight: bold;
+          padding: 1rem 2rem;
+          background: $shadow;
+        }
+
+        div{
+          position: relative;
+          min-height: 14rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          overflow: hidden;
+        }
+        
+        div + div{
+          flex:1;
+        }
+
+        ul{
+          position: absolute;
+          left: 50%;
+          z-index: 1;
+          transform: translateX(-50%);
+          transition: left .25s ease;
+        }
+
+        li {
+          margin: .5rem 0;
+        }
+        
+      }
+    }
+  }
+
+  &-question{
+    position: absolute;
+    text-align: center;
+    left: 50%;
+    z-index: 1;
+    transform: translateX(-50%);
+    transition: left .25s ease;
+
+    * {
+      color: $white;
+    }
+    
+    > p {
+      font-weight: bold;
+      font-size: 2rem;
+    }
+
+    ul{
+      flex: 1;
+    }
+
+    li{
+      margin: .5rem 0;
+    }
+
+    @extend %radioQuestion;
+  }
+
+  &-empty{
+    background: $purple;
+    height: 100vh;
+
+    p{
+      color: $white;
+      font-size: 2rem;
+    }
+
+    a{
+      @extend %button-style;
+      text-decoration: none;
+      background: $white;
+      color: $purple;
+      margin-top: 1rem;
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+    }
+  }
+}
+
+.quiz{
+  flex: 1;
+  height: 100vh;
+  background: $purple;
+
+  ul{
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1rem;
+
+    @include mobile(){
+      grid-template-columns: 1fr;
+      padding: 0 2rem;
+      flex: 1;
+    }
+  }
+
+  li{
+    display: inline-flex;
+    margin: 1rem 0;
+    border-radius: 1rem;
+    border: .1rem solid $shadow;
+    user-select: none;
+    transition: background-color .25s ease;
+
+    @include mobile(){
+      flex: 1;
+    }
+
+    &:hover{
+      background: rgba($gray, .2);
+    }
+
+    a{
+      flex: 1;
+      padding: 1rem 4rem;
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    p{
+      font-size: 2rem;
+      color: $white;
+    }
+
+    img{
+      height: 5rem;
+      width: 5rem;
+      margin-right: 2rem;
+    }
+  }
+  
+}
+
+.result{
+  flex: 1;
+  height: 100vh;
+
+  p{
+    text-align: center;
+    margin: 0;
+  }
+
+  > p{
+    color: $gray;
+    font-weight: bold;
+    font-size: 1.6rem;
+  }
+  
+  > p:nth-child(2){
+    font-size: 3rem;
+    color: $purple;
+    margin-bottom: 4rem;
+  }
+
+  img{
+    width: 30rem;
+    height: auto;
+
+    @include mobile(){
+      width: 20rem;
+    }
+
+    ~ p {
+      margin-top: 4rem;
+    }
+  }
+
+  > div{
+    display: flex;
+    align-items: center;
+
+    @include mobile(){
+      width: 100%;
+      padding: 0 2rem;
+      flex-direction: column;
+    }
+  }
+
+  a{
+    @extend %button-style;
+    display: inline-flex;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    min-width: 10rem;
+    @include mobile(){
+      margin-top: 2rem;
+      width: 100%;
+    }
+  }
+
+  a + a{
+    margin: 1rem;
+  }
+
+  .btn{
+    &-try-again{
+      color: $white;
+      background: $purple;
+    }
+    &-home{
+      color: $purple;
+      background: $white;
+      border: .1rem solid $purple;
+    }
+  }
+}
+
+.popup{
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  overflow: hidden;
+  background: rgba($white, .5);
+  z-index: 10;
+
+  > div{
+    padding: 1rem 2rem;
+    background: $white;
+    animation-name: popin;
+    animation-duration: .25s;
+    animation-fill-mode: forwards;
+
+    div {
+      display: inline-flex;
+      width: 100%;
+      padding: 1rem 0;
+      justify-content: flex-end;
+
+      button{
+        @extend %button-style;
+        display: inline-flex;
+        text-decoration: none;
+        justify-content: center;
+        align-items: center;
+        min-width: 8rem;
+        padding: 1rem 2rem;
+      }
+
+      button:nth-child(odd){
+        margin-right: 1rem;
+        background: $white;
+        border: .1rem solid $purple;
+        color: $purple;
+      }
+
+      button:nth-child(even){
+        color: $white;
+        background: $purple;
+      }
+    }
+  }
+
+}
+
+@keyframes popin {
+  0%{
+    opacity: 0;
+    transform: scale(5);
+  } 
+  100%{
+    opacity: 1;
+    transform: scale(1);
+  }
+}
