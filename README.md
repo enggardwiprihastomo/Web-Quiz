@@ -1,5 +1,5 @@
 # Web Quiz
-Simple web based languages quiz with responsive design made with Typescript and Next.Js
+Simple web based languages quiz with responsive design, made with Typescript, MySQL and Next.Js
 ![Quiz app](https://github.com/enggardwiprihastomo/Web-Quiz/blob/main/snap/snap.png)
 
 ## Prerequisite
